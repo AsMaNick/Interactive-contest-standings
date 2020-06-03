@@ -45,5 +45,21 @@ class User(BaseModel):
     def get_registration_date(self):
         return str(self.registration_date)[:10]
         
-        
+  
+class Standings(BaseModel):
+    creator = ForeignKeyField(User, backref='created_standings')
+    season = CharField()
+    date = DateTimeField()
+    creation_date = DateTimeField(default=datetime.now)
+    title = CharField()
+    venue = CharField()
+    link = CharField()
+    identification = CharField()
+    logo = CharField(default='/static/images/logo.png')
+    
+    def get_short_link(self):
+        start = self.link.find('://') + 3
+        return self.link[start:self.link.find('/', start)]
+    
 User.create_table()
+Standings.create_table()

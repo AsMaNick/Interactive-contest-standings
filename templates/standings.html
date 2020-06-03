@@ -35,19 +35,19 @@
             <th>External link</th>
         </tr>
         <tr>
-            <td><a href="/standings.html"> <img src="/static/images/add.png" class="img-circle logo_small_photo"></a></td>
-            <td><a href="/standings">Create new contest standings</a></td>
+            <td><a href="/standings/create"> <img src="/static/images/add.png" class="img-circle logo_small_photo"></a></td>
+            <td><a href="/standings/create">Create new contest standings</a></td>
             <td>-</td>
             <td>-</td>
             <td>-</td>
         </tr>
-        {% for contest in contests %}
+        {% for standing in standings %}
             <tr>
-                <td><a href="/standings/{{contest.id}}"> <img src="{{contest.logo}}" class="img-circle logo_small_photo"></a></td>
-                <td>{{contest.season}}</td>
-                <td>{{contest.title}}</td>
-                <td>{{contest.date}}</td>
-                <td><a href="{{contest.link}}">contest.get_short_link()</a></td>
+                <td><a href="/standings/{{standing.id}}"> <img src="{{standing.logo}}" class="img-circle logo_small_photo"></a></td>
+                <td>{{standing.season}}</td>
+                <td>{{standing.title}}</td>
+                <td>{{standing.date}}</td>
+                <td><a href="{{standing.link}}">{{standing.get_short_link()}}</a></td>
             </tr>
         {% endfor %}
     </table>

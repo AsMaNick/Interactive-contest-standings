@@ -1,33 +1,3 @@
-function setError(id, error) {
-    $(id + ' .help-block').text(error);
-    if (error == '') {
-        $(id).removeClass('has-error');
-        return false;
-    } else {
-        $(id).addClass('has-error');
-        return true;
-    }
-}
-
-function getError(s, name) {
-    if (s == '') {
-        return 'This field may not be blank';
-    }
-    if (s.length < 2) {
-        return name + ' should contain at least 2 characters';
-    }
-    if (s.length > 50) {
-        return name + ' should contain no more than 50 characters';
-    }
-    for (var c of s) {
-        if (isDigit(c) || isLetter(c) || ['_', '-', '@', '!', '#'].includes(c)) {
-            continue;
-        }
-        return name + ' should consists of only latin letters, digits or sybmols "_-@!#"';
-    }
-    return '';
-}
-
 function signUp() {
     var username = $('#username_input').val();
     var firstname = $('#firstname_input').val();

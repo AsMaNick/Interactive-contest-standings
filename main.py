@@ -3,6 +3,7 @@ import chess
 from flask import Flask, render_template, request, jsonify, send_from_directory, redirect, session
 from flask_assets import Environment, Bundle
 from database import *
+import requests
 
         
 app = Flask(__name__)
@@ -50,9 +51,16 @@ def all_standings(user):
 @app.route('/standings/my')
 @check_login
 def my_standings(user):
-    return render_template('standings.html', type='my', user=user)
+    return render_template('standings.html', type='my', user=user,
+                           standings=Standings.select().where(Standings.creator == user))
 
 
+@app.route('/standings/create')
+@check_login
+def create_standings(user):
+    return render_template('create_standings.html', type='my', user=user)
+    
+    
 @app.route('/users')
 @check_login
 def users(user):
@@ -107,6 +115,42 @@ def api_login():
     else:
         res = {
             'status': 'invalid username or password'
+        }
+    return jsonify(res)
+    
+    
+@app.route('/api/standings/create', methods=['POST'])
+@check_login
+def api_create_standings(user):
+    data = request.form
+    try:
+        result = requests.get(data['link'])
+        print(result.status_code)
+        if str(result.status_code)[0] not in '23':
+            res = {
+                'status': 'invalid URL'
+            }
+        else:
+            standings = Standings.create(creator=user,
+                                         season=data['season'],
+                                         date=data['date'],
+                                         title=data['title'],
+                                         venue=data['venue'],
+                                         link=data['link'],
+                                         identification=data['identification'])
+            if len(request.files) > 0 and request.files['logo'].content_type[:6] == 'image/':
+                logo_url = f'static/images/logos/{standings.id}.{request.files["logo"].content_type[6:]}'
+                request.files['logo'].save(logo_url)
+                standings.logo = '/' + logo_url
+                standings.save()
+            res = {
+                    'status': 'ok'
+            }
+    except Exception as e:
+        from traceback import format_exc
+        print(format_exc())
+        res = {
+            'status': 'invalid URL'
         }
     return jsonify(res)
     
