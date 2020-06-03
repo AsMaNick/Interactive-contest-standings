@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block header %}
+    {{ super() }}
+{% endblock %}
+
+{% block menu %}
+    {{ super() }}
+    {% block menu_all_standings %}
+        {% if type == 'all' %}
+            <li class="active"><a href="/contests/all">All standings</a></li>
+        {% else %}
+            {{ super() }}
+        {% endif %}
+    {% endblock %}
+    {% block menu_my_standings %}
+        {% if type == 'my' %}
+            <li class="active"><a href="/contests/my">My standings</a></li>
+        {% else %}
+            {{ super() }}
+        {% endif %}
+    {% endblock %}
+{% endblock %}
+
+{% block content %}
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <h1 class="page-header">Contests standings</h1>
+
+    <table class="table-hover" style='margin-left: 40px; width: 100%'>
+        <tr>
+            <th>Logo</th>
+            <th>Season</th>
+            <th>Competition</th>
+            <th>Date</th>
+            <th>External link</th>
+        </tr>
+        <tr>
+            <td><a href="/standings.html"> <img src="/static/images/add.png" class="img-circle logo_small_photo"></a></td>
+            <td><a href="/standings">Create new contest standings</a></td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+        </tr>
+        {% for contest in contests %}
+            <tr>
+                <td><a href="/standings/{{contest.id}}"> <img src="{{contest.logo}}" class="img-circle logo_small_photo"></a></td>
+                <td>{{contest.season}}</td>
+                <td>{{contest.title}}</td>
+                <td>{{contest.date}}</td>
+                <td><a href="{{contest.link}}">contest.get_short_link()</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

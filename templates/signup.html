@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block header_username %}
+    <li><a href="/signup"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+{% endblock %}
+{% block header_logout %}
+    <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+{% endblock %}
+
+{% block menu %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="form-container">
+        <h2>Registration</h2>
+        <hr>
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label class="control-label col-sm-2">Username:</label>
+                <div class="col-sm-10" id="username_div">
+                    <input class="form-control" id="username_input" placeholder="Enter username"> 
+                    <span class="help-block"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2">First name:</label>
+                <div class="col-sm-10" id="firstname_div">
+                    <input class="form-control" id="firstname_input" placeholder="Enter your first name"> 
+                    <span class="help-block"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2">Second name:</label>
+                <div class="col-sm-10" id="secondname_div">
+                    <input class="form-control" id="secondname_input" placeholder="Enter your second name"> 
+                    <span class="help-block"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2">Password:</label>
+                <div class="col-sm-10" id="password_div">          
+                    <input type="password" class="form-control" id="password_input" placeholder="Enter your password">
+                    <span class="help-block"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2">Repeat password:</label>
+                <div class="col-sm-10" id="repeat_password_div">          
+                    <input type="password" class="form-control" id="repeat_password_input" placeholder="Enter your password again">
+                    <span class="help-block"></span>
+                </div>
+            </div>
+            <div class="form-group">        
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="button" class="btn btn-default" onclick="signUp()">Sign Up</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    {% assets output="gen/login.js", "js/login.js", "js/utils.js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+{% endblock %}

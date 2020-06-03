@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Contest standings</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="/static/third-party/bootstrap/css/bootstrap.min.css">
+	{% assets output="gen/packed.css", "css/styles.css" %}
+        <link rel='stylesheet' href="{{ ASSET_URL }}">
+    {% endassets %}
+	<script src="/static/third-party/js/jquery.min.js"></script>
+	<script src="/static/third-party/bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body>
+    {% block header %}
+        <nav class="navbar navbar-inverse navbar-fixed-top" style="margin-bottom: 0px">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/home">Contest standings</a>
+                </div>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle clickable" data-toggle="dropdown">
+                            <img src="/static/images/en-flag.png" class="flag" id="language_flag"> </img>
+                            english <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li onclick="changeLanguage('en')"><a class="clickable"> <img src="/static/images/en-flag.png" class="flag"> </img> english</a></li>
+                        </ul>
+                    </li>
+                    {% block header_username %}
+                    <li><a href="/users/{{user.id}}"><span class="glyphicon glyphicon-user"></span> {{user.username}}</a></li>
+                    {% endblock %}
+                    {% block header_logout %}
+                    <li><a class="clickable" href="/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+                    {% endblock %}
+                </ul>
+            </div>
+        </nav>
+    {% endblock %}
+    
+    {% block menu %}
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-3 col-md-2 sidebar">
+                    <ul class="nav nav-sidebar">
+                        {% block menu_all_standings %}
+                            <li><a href="/contests/all">All standings</a></li>
+                        {% endblock %}
+                        {% block menu_my_standings %}
+                            <li><a href="/contests/my">My standings</a></li>
+                        {% endblock %}
+                        {% block menu_teams %}
+                            <li><a href="/teams">Teams</a></li>
+                        {% endblock %}
+                        {% block menu_users %}
+                            <li><a href="/users">Users</a></li>
+                        {% endblock %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+    
+    {% block content %}
+    {% endblock %}
+</body>
+
+{% block scripts %}
+{% endblock %}
+
+</html>
