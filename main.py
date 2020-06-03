@@ -41,16 +41,16 @@ def signup():
     return render_template('signup.html')
 
 
-@app.route('/contests/all')
+@app.route('/standings/all')
 @check_login
-def all_contests(user):
-    return render_template('contests.html', type='all', user=user)
+def all_standings(user):
+    return render_template('standings.html', type='all', user=user)
     
     
-@app.route('/contests/my')
+@app.route('/standings/my')
 @check_login
-def my_contests(user):
-    return render_template('contests.html', type='my', user=user)
+def my_standings(user):
+    return render_template('standings.html', type='my', user=user)
 
 
 @app.route('/users')
@@ -59,6 +59,12 @@ def users(user):
     return render_template('users.html', user=user, users=User.select())
 
 
+@app.route('/users/<int:user_id>')
+@check_login
+def view_user(user, user_id):
+    return render_template('user.html', user=user)
+    
+    
 @app.route('/home')
 @check_login
 def home(user):

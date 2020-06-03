@@ -8,14 +8,14 @@
     {{ super() }}
     {% block menu_all_standings %}
         {% if type == 'all' %}
-            <li class="active"><a href="/contests/all">All standings</a></li>
+            <li class="active"><a href="/standings/all">All standings</a></li>
         {% else %}
             {{ super() }}
         {% endif %}
     {% endblock %}
     {% block menu_my_standings %}
         {% if type == 'my' %}
-            <li class="active"><a href="/contests/my">My standings</a></li>
+            <li class="active"><a href="/standings/my">My standings</a></li>
         {% else %}
             {{ super() }}
         {% endif %}
