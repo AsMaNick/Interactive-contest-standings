@@ -57,9 +57,20 @@ class Standings(BaseModel):
     identification = CharField()
     logo = CharField(default='/static/images/logo.png')
     
+    duration = IntegerField()
+    n_problems = IntegerField()
+    team_column = IntegerField(default=2)
+    region_column = IntegerField(default=-1)
+    first_problem_column = IntegerField(default=3)
+    time_format = CharField()
+    
     def get_short_link(self):
         start = self.link.find('://') + 3
         return self.link[start:self.link.find('/', start)]
     
+    def get_date(self):
+        return str(self.date)[:10]
+
+
 User.create_table()
 Standings.create_table()

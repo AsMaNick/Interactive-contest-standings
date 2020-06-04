@@ -71,6 +71,49 @@
                     </select>
                 </div>
             </div>
+            
+            <div class="form-group">
+                <label class="control-label col-sm-2">Number of problems:</label>
+                <div class="col-sm-10" id="n_problems_div">
+                    <input class="form-control" type="number" min="1" max="20" id="n_problems_input" placeholder="Enter number of problems in the competition"> 
+                    <span class="help-block"></span>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="control-label col-sm-2">Team column:</label>
+                <div class="col-sm-10" id="team_column_div">
+                    <input class="form-control" type="number" min="1" max="30" id="team_column_input" placeholder="Enter column with 'Team name' in the standings, leave empty for default value (2)"> 
+                    <span class="help-block"></span>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="control-label col-sm-2">Region column:</label>
+                <div class="col-sm-10" id="region_column_div">
+                    <input class="form-control" type="number" min="1" max="30" id="region_column_input" placeholder="Enter column with 'Region' in the standings, leave empty for no region"> 
+                    <span class="help-block"></span>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="control-label col-sm-2">First problem column:</label>
+                <div class="col-sm-10" id="first_problem_column_div">
+                    <input class="form-control" type="number" min="1" max="30" id="first_problem_column_input" placeholder="Enter column with 'problem A' in the standings, leave empty for default value (3)"> 
+                    <span class="help-block"></span>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="control-label col-sm-2">Time format:</label>
+                <div class="col-sm-10" id="time_format_div">
+                    <select class="form-control" id="time_format_select">
+                        <option selected>hours (e.g. 1:35) </option>
+                        <option>minutes (e.g. 95, 95:00) </option>
+                    </select>
+                </div>
+            </div>
+            
             <div class="form-group">
                 <label class="control-label col-sm-2">Logo:</label>
                 <div class="col-sm-10" id="logo_div">

@@ -32,6 +32,26 @@ function createStandings() {
     var link = $('#link_input').val();
     var duration = $('#duration_select').val();
     var identification = $('#identification_select').val();
+    
+    var n_problems = $('#n_problems_input').val();
+    var team_column = $('#team_column_input').val();
+    if (team_column == '') {
+        team_column = 2;
+    }
+    var region_column = $('#region_column_input').val();
+    if (region_column == '') {
+        region_column = -1;
+    }
+    var first_problem_column = $('#first_problem_column_input').val();
+    if (first_problem_column == '') {
+        first_problem_column = 3;
+    }
+    var time_format = $('#time_format_select').val();
+    if (time_format.substr(0, 5) == 'hours') {
+        time_format = 'hours';
+    } else {
+        time_format = 'minutes';
+    }
     var has_error = false;
     if (!checkSeason(season)) {
         has_error |= setError('#season_div', 'Season should have format yyyy-yyyy');
@@ -58,6 +78,11 @@ function createStandings() {
 	form_data.append('link', link);
 	form_data.append('duration', duration);
 	form_data.append('identification', identification);
+	form_data.append('n_problems', n_problems);
+	form_data.append('team_column', team_column);
+	form_data.append('region_column', region_column);
+	form_data.append('first_problem_column', first_problem_column);
+	form_data.append('time_format', time_format);
 	if (logos.length > 0) {
 		form_data.append('logo', logos[0]);
 	}

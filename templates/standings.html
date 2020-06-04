@@ -46,7 +46,7 @@
                 <td><a href="/standings/{{standing.id}}"> <img src="{{standing.logo}}" class="img-circle logo_small_photo"></a></td>
                 <td>{{standing.season}}</td>
                 <td>{{standing.title}}</td>
-                <td>{{standing.date}}</td>
+                <td>{{standing.get_date()}}</td>
                 <td><a href="{{standing.link}}">{{standing.get_short_link()}}</a></td>
             </tr>
         {% endfor %}
