@@ -156,10 +156,8 @@ def api_login():
 @check_login
 def api_create_standings(user):
     data = request.form
-    print(data)
     try:
         result = requests.get(data['link'])
-        print(result.status_code)
         if str(result.status_code)[0] not in '23':
             res = {
                 'status': 'invalid URL'
