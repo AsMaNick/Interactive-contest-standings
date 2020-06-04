@@ -206,15 +206,13 @@ class Standings:
         print('</table>', file=f)
         
     def write(self, f):
-        if True:
-            print('<link rel="stylesheet" href="{}styles/unpriv.css" type="text/css" />'.format(self.path_to_scripts), file=f)
-            print('<link rel="stylesheet" href="{}styles/unpriv3.css" type="text/css" />'.format(self.path_to_scripts), file=f)
-            print('<link rel="stylesheet" href="{}styles/animate.css" type="text/css" />'.format(self.path_to_scripts), file=f)
-            print('<link rel="stylesheet" href="{}styles/styles.css" type="text/css" />'.format(self.path_to_scripts), file=f)
-            print('<style id="styles"> table.standings td { height: 40px; } </style>', file=f)
-        else:
-            print('<link rel="stylesheet" href="http://ejudge.khai.edu/ejudge/unpriv.css" type="text/css" />', file=f)
-            print('<link rel="stylesheet" href="http://ejudge.khai.edu/ejudge/unpriv3.css" type="text/css" />', file=f)
+        print('<title>Contest standings</title>', file=f)
+        print('<link rel="stylesheet" href="{}styles/unpriv.css" type="text/css" />'.format(self.path_to_scripts), file=f)
+        print('<link rel="stylesheet" href="{}styles/unpriv3.css" type="text/css" />'.format(self.path_to_scripts), file=f)
+        print('<link rel="stylesheet" href="{}styles/animate.css" type="text/css" />'.format(self.path_to_scripts), file=f)
+        print('<link rel="stylesheet" href="{}styles/styles.css" type="text/css" />'.format(self.path_to_scripts), file=f)
+        print('<style id="styles"> table.standings td { height: 40px; } </style>', file=f)
+            
         print('<body onload=loadResults()>', file=f)
         print('<script type="text/javascript" src="{}scripts/jquery.js"> </script>'.format(self.path_to_scripts), file=f)
         print('<script type="text/javascript" src="{}scripts/filter_regions.js"> </script>'.format(self.path_to_scripts), file=f)

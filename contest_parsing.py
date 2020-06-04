@@ -20,6 +20,8 @@ def get_time(content, time_format):
         return -1
     else:
         pos = content.find(':')
+        if pos == -1:
+            return -1
         hours = content[:pos]
         minutes = content[pos + 1:]
         if hours.isdigit() and minutes.isdigit():
@@ -74,6 +76,8 @@ def parse_cell(content, time_format):
         return 'ok', False, wrong_attempts, time
     if time == -1:
         return 'fail', False, -1, -1
+    if not has_plus:
+        wrong_attempts -= 1
     return 'ok', True, wrong_attempts, time
     
 
@@ -149,7 +153,7 @@ def parse_standings(link, n_problems, team_column, region_column, first_problem_
         standings.add(team_result)
     standings.set_problem_openers(problem_openers)
     standings.sort()
-    for bad in bad_rows[first_ok_row:last_ok_row + 1]:
+    for row, bad in enumerate(bad_rows[first_ok_row:last_ok_row + 1], 1):
         if bad:
-            return "fail, cann't parse cell with results", None
+            return "fail, bad row inside the standings {}/{}".format(row, len(bad_rows)), None
     return 'ok', standings
