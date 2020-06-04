@@ -1,3 +1,6 @@
+statistic_team_number = 5
+
+
 def get_time_str(time):
     h = time // 60
     m = time % 60

@@ -139,7 +139,7 @@ def parse_standings(link, n_problems, team_column, region_column, first_problem_
         if bad_row:
             continue
         for problem_id, (solved, wrong_attempts, time) in enumerate(problem_datas):
-            if time_openers[problem_id] > time:
+            if solved and time_openers[problem_id] > time:
                 problem_openers[problem_id] = team_name
                 time_openers[problem_id] = time
         if first_ok_row == -1:
@@ -153,9 +153,3 @@ def parse_standings(link, n_problems, team_column, region_column, first_problem_
         if bad:
             return "fail, cann't parse cell with results", None
     return 'ok', standings
-
-
-#sprint(parse_standings('http://acmallukrainian.ho.ua/2019/3/standings.html', 11, 2, 3, 4, 'hours'))
-#print(parse_standings('https://neerc.ifmo.ru/archive/2019/standings.html', 12, 2, None, 3, 'minutes'))
-#print(parse_standings('http://opencup.ru/index.cgi?data=macros/stage&head=index&menu=index&stg=4&region=main&ncup=ock&class=ock', 11, 2, None, 3, 'hours'))
-#print(parse_standings('https://maps20.kattis.com/standings', 12, 2, None, 7, 'minutes'))
