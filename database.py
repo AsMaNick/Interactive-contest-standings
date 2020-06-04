@@ -40,7 +40,7 @@ class User(BaseModel):
         return f'{self.secondname} {self.firstname}'
         
     def get_created_standings_count(self):
-        return 0
+        return len(self.created_standings)
         
     def get_registration_date(self):
         return str(self.registration_date)[:10]

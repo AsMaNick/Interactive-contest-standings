@@ -50,16 +50,24 @@ def signup():
 @app.route('/standings/all')
 @check_login
 def all_standings(user):
-    return render_template('standings.html', type='all', user=user)
+    return render_template('standings.html', type='all', user=user,
+                           standings=Standings.select())
     
     
 @app.route('/standings/my')
 @check_login
 def my_standings(user):
     return render_template('standings.html', type='my', user=user,
-                           standings=Standings.select().where(Standings.creator == user))
+                           standings=Standings.select().where(Standings.creator == user).order_by(-Standings.id))
 
 
+@app.route('/users/<int:user_id>/standings')
+@check_login
+def user_standings(user, user_id):
+    return render_template('standings.html', type='all', user=user,
+                           standings=Standings.select().where(Standings.creator == user_id).order_by(-Standings.id))
+                           
+                           
 @app.route('/standings/<int:standings_id>')
 def view_standings(standings_id):
     standings = Standings.get_or_none(Standings.id == standings_id)
