@@ -71,6 +71,15 @@ class Standings(BaseModel):
     def get_date(self):
         return str(self.date)[:10]
 
+    def get_named_date(self):
+        date = self.get_date()
+        year = int(date[:4])
+        month = int(date[5:7])
+        day = int(date[8:])
+        months = ['January', 'February', 'March', 'April', 
+                  'May', 'June', 'July', 'August', 
+                  'September', 'October', 'November', 'December']
+        return f'{months[month - 1]} {day}, {year}'
 
 User.create_table()
 Standings.create_table()
