@@ -175,7 +175,7 @@ class Standings:
                     sum_place += place + 1
                 if teams <= statistic_team_number:
                     solved_by_twentiest_team = result.total
-        return region, teams, problems_solved / min(statistic_team_number, teams), sum_place / min(statistic_team_number, teams), solved_by_twentiest_team
+        return region, teams, problems_solved / min(statistic_team_number, max(1, teams)), sum_place / min(statistic_team_number, max(1, teams)), solved_by_twentiest_team
         
     def write_regions(self, f):
         print('''<table class="region_statistic" width="50%"> <tr> <th>Show</th> <th>Region</th><th>Teams</th> <th>Average problems solved by top {} teams</th> <th>Average place taken by top {} teams</th> <th>Problems solved by {}<sup>th</sup> team </th> </tr>'''.format(statistic_team_number, statistic_team_number, statistic_team_number), file=f)

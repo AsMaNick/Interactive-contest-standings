@@ -103,7 +103,16 @@ def view_standings(standings_id):
 @app.route('/standings/create')
 @check_login
 def create_standings(user):
-    return render_template('create_standings.html', type='my', user=user)
+    return render_template('create_standings.html', type='create', user=user)
+    
+    
+@app.route('/standings/<int:standings_id>/edit')
+@check_login
+def edit_standings(user, standings_id):
+    standings = Standings.get_or_none(Standings.id == standings_id)
+    if standings is None or standings.creator.id != user.id:
+        return redirect('/standings/my', code=302)
+    return render_template('create_standings.html', type='edit', user=user, standings=standings)
     
     
 @app.route('/users')
@@ -200,6 +209,57 @@ def api_create_standings(user):
         res = {
             'status': 'invalid URL'
         }
+    return jsonify(res)
+    
+    
+@app.route('/api/standings/<int:standings_id>/edit', methods=['POST'])
+@check_login
+def api_edit_standings(user, standings_id):
+    standings = Standings.get_or_none(Standings.id == standings_id)
+    if standings is None:
+        res = {
+            'status': 'such standings doesn\'t exist'
+        }
+    elif standings.creator.id != user.id:
+        res = {
+            'status': 'you have no access to this standings'
+        }
+    else:
+        data = request.form
+        try:
+            result = requests.get(data['link'])
+            if str(result.status_code)[0] not in '23':
+                res = {
+                    'status': 'invalid URL'
+                }
+            else:
+                duration = int(data['duration'][0]) * 60 + int(data['duration'][2:4])
+                standings.season = data['season']
+                standings.date = data['date']
+                standings.title = data['title']
+                standings.venue = data['venue']
+                standings.link = data['link']
+                standings.identification = data['identification']
+                standings.duration = duration
+                standings.n_problems = data['n_problems']
+                standings.team_column = data['team_column']
+                standings.region_column = data['region_column']
+                standings.first_problem_column = data['first_problem_column']
+                standings.time_format = data['time_format']
+                if len(request.files) > 0 and request.files['logo'].content_type[:6] == 'image/':
+                    logo_url = f'static/images/logos/{standings.id}.{request.files["logo"].content_type[6:]}'
+                    request.files['logo'].save(logo_url)
+                    standings.logo = '/' + logo_url
+                standings.save()
+                res = {
+                        'status': 'ok'
+                }
+        except Exception as e:
+            from traceback import format_exc
+            print(format_exc())
+            res = {
+                'status': 'invalid URL'
+            }
     return jsonify(res)
     
     

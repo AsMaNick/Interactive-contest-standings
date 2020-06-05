@@ -24,7 +24,7 @@ function checkDate(date) {
     return 1 <= d && d <= 31 && 1 <= m && m <= 12 && 1000 <= y && y <= 9999;
 }
 
-function createStandings() {
+function getFormData() {
     var season = $('#season_input').val();
     var date = $('#date_input').val();
     var title = $('#title_input').val();
@@ -67,7 +67,10 @@ function createStandings() {
     has_error |= setError('#venue_div', getError(venue, 'Venue'));
     has_error |= setError('#link_div', getError(link, 'Link', 2, 256));
     if (has_error) {
-        return;
+        return {
+            has_error: true,
+            form_data: 0
+        };
     }
     var logos = $("#logo_input").prop("files");    
     var form_data = new FormData();
@@ -86,9 +89,41 @@ function createStandings() {
 	if (logos.length > 0) {
 		form_data.append('logo', logos[0]);
 	}
-    console.log(form_data);
+    return {
+        has_error: false,
+        form_data: form_data
+    };
+}
+
+function createStandings() {
+    var data = getFormData();
+    if (data.has_error) {
+        return;
+    }
     $.ajax('http://' + document.domain + ':' + location.port + '/api/standings/create', {
-        data: form_data,
+        data: data.form_data,
+        processData: false,
+        contentType: false,
+        cache: false,
+        enctype: 'multipart/form-data',
+        type: 'POST', 
+        success: function (data) {
+            if (data.status == 'ok') {
+                document.location.href = 'http://' + document.domain + ':' + location.port + '/standings/my';
+            } else {
+                setError('#link_div', capitalize(data.status));
+            }
+        }
+    });
+}
+
+function editStandings() {
+    var data = getFormData();
+    if (data.has_error) {
+        return;
+    }
+    $.ajax('http://' + document.domain + ':' + location.port + '/api' + document.location.pathname, {
+        data: data.form_data,
         processData: false,
         contentType: false,
         cache: false,

@@ -10,40 +10,46 @@
 
 {% block content %}
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-        <h1 class="page-header">Create new contest standings</h1>
+        <h1 class="page-header">
+        {% if type == 'create' %}
+            Create new contest standings
+        {% else %}
+            Edit contest standings
+        {% endif %}
+        </h1>
         <form class="form-horizontal">
             <div class="form-group">
                 <label class="control-label col-sm-2">Season:</label>
                 <div class="col-sm-10" id="season_div">
-                    <input class="form-control" id="season_input" placeholder="Enter season of the contest, e.g. 2019-2020"> 
+                    <input class="form-control" id="season_input" placeholder="Enter season of the contest, e.g. 2019-2020" {% if standings %} value="{{standings.season}}" {% endif %}> 
                     <span class="help-block"></span>
                 </div>
             </div>
             <div class="form-group">
                 <label class="control-label col-sm-2">Date:</label>
                 <div class="col-sm-10" id="date_div">
-                    <input class="form-control" id="date_input" type="date"> 
+                    <input class="form-control" id="date_input" type="date" {% if standings %} value="{{standings.get_date()}}" {% endif %}>
                     <span class="help-block"></span>
                 </div>
             </div>
             <div class="form-group">
                 <label class="control-label col-sm-2">Standings title:</label>
                 <div class="col-sm-10" id="title_div">
-                    <input class="form-control" id="title_input" placeholder="Enter standings title, e.g. Opencup XIX, Grand Prix of Serbia"> 
+                    <input class="form-control" id="title_input" placeholder="Enter standings title, e.g. Opencup XIX, Grand Prix of Serbia" {% if standings %} value="{{standings.title}}" {% endif %}> 
                     <span class="help-block"></span>
                 </div>
             </div>
             <div class="form-group">
                 <label class="control-label col-sm-2">Competition venue:</label>
                 <div class="col-sm-10" id="venue_div">
-                    <input class="form-control" id="venue_input" placeholder="Enter venue of the competition"> 
+                    <input class="form-control" id="venue_input" placeholder="Enter venue of the competition" {% if standings %} value="{{standings.venue}}" {% endif %}> 
                     <span class="help-block"></span>
                 </div>
             </div>
             <div class="form-group">
                 <label class="control-label col-sm-2">Official results:</label>
                 <div class="col-sm-10" id="link_div">
-                    <input class="form-control" id="link_input" placeholder="Enter link to the official results"> 
+                    <input class="form-control" id="link_input" placeholder="Enter link to the official results" {% if standings %} value="{{standings.link}}" {% endif %}> 
                     <span class="help-block"></span>
                 </div>
             </div>
@@ -51,13 +57,13 @@
                 <label class="control-label col-sm-2">Duration:</label>
                 <div class="col-sm-10" id="duration_div">
                     <select class="form-control" id="duration_select">
-                        <option>1:00:00</option>
-                        <option>1:30:00</option>
-                        <option>2:00:00</option>
-                        <option>2:30:00</option>
-                        <option>3:00:00</option>
-                        <option>4:00:00</option>
-                        <option selected>5:00:00</option>
+                        <option {% if standings and standings.duration == 60 %} selected {% endif %}>1:00:00</option>
+                        <option {% if standings and standings.duration == 90 %} selected {% endif %}>1:30:00</option>
+                        <option {% if standings and standings.duration == 120 %} selected {% endif %}>2:00:00</option>
+                        <option {% if standings and standings.duration == 150 %} selected {% endif %}>2:30:00</option>
+                        <option {% if standings and standings.duration == 180 %} selected {% endif %}>3:00:00</option>
+                        <option {% if standings and standings.duration == 240 %} selected {% endif %}>4:00:00</option>
+                        <option {% if not standings or (standings and standings.duration == 300) %} selected {% endif %}>5:00:00</option>
                     </select>
                 </div>
             </div>
@@ -65,9 +71,9 @@
                 <label class="control-label col-sm-2">Contestants identification:</label>
                 <div class="col-sm-10" id="identification_div">
                     <select class="form-control" id="identification_select">
-                        <option selected>handle on codeforces</option>
-                        <option>surname with link to codeforces' profile</option>
-                        <option>none</option>
+                        <option {% if not standings or (standings and standings.identification == "handle on codeforces") %} selected {% endif %}>handle on codeforces</option>
+                        <option {% if standings and standings.identification == "surname with link to codeforces' profile" %} selected {% endif %}>surname with link to codeforces' profile</option>
+                        <option {% if standings and standings.identification == "none" %} selected {% endif %}>none</option>
                     </select>
                 </div>
             </div>
@@ -75,7 +81,7 @@
             <div class="form-group">
                 <label class="control-label col-sm-2">Number of problems:</label>
                 <div class="col-sm-10" id="n_problems_div">
-                    <input class="form-control" type="number" min="1" max="20" id="n_problems_input" placeholder="Enter number of problems in the competition"> 
+                    <input class="form-control" type="number" min="1" max="20" id="n_problems_input" placeholder="Enter number of problems in the competition" {% if standings %} value="{{standings.n_problems}}" {% endif %}> 
                     <span class="help-block"></span>
                 </div>
             </div>
@@ -83,7 +89,7 @@
             <div class="form-group">
                 <label class="control-label col-sm-2">Team column:</label>
                 <div class="col-sm-10" id="team_column_div">
-                    <input class="form-control" type="number" min="1" max="30" id="team_column_input" placeholder="Enter column with 'Team name' in the standings, leave empty for default value (2)"> 
+                    <input class="form-control" type="number" min="1" max="30" id="team_column_input" placeholder="Enter column with 'Team name' in the standings, leave empty for default value (2)" {% if standings and standings.team_column != 2 %} value="{{standings.team_column}}" {% endif %}> 
                     <span class="help-block"></span>
                 </div>
             </div>
@@ -91,7 +97,7 @@
             <div class="form-group">
                 <label class="control-label col-sm-2">Region column:</label>
                 <div class="col-sm-10" id="region_column_div">
-                    <input class="form-control" type="number" min="1" max="30" id="region_column_input" placeholder="Enter column with 'Region' in the standings, leave empty for no region"> 
+                    <input class="form-control" type="number" min="1" max="30" id="region_column_input" placeholder="Enter column with 'Region' in the standings, leave empty for no region" {% if standings and standings.region_column != -1 %} value="{{standings.region_column}}" {% endif %}> 
                     <span class="help-block"></span>
                 </div>
             </div>
@@ -99,7 +105,7 @@
             <div class="form-group">
                 <label class="control-label col-sm-2">First problem column:</label>
                 <div class="col-sm-10" id="first_problem_column_div">
-                    <input class="form-control" type="number" min="1" max="30" id="first_problem_column_input" placeholder="Enter column with 'problem A' in the standings, leave empty for default value (3)"> 
+                    <input class="form-control" type="number" min="1" max="30" id="first_problem_column_input" placeholder="Enter column with 'problem A' in the standings, leave empty for default value (3)" {% if standings and standings.first_problem_column != 3 %} value="{{standings.first_problem_column}}" {% endif %}> 
                     <span class="help-block"></span>
                 </div>
             </div>
@@ -108,8 +114,8 @@
                 <label class="control-label col-sm-2">Time format:</label>
                 <div class="col-sm-10" id="time_format_div">
                     <select class="form-control" id="time_format_select">
-                        <option selected>hours (e.g. 1:35) </option>
-                        <option>minutes (e.g. 95, 95:00) </option>
+                        <option {% if not standings or (standings and standings.time_format == "hours") %} selected {% endif %}>hours (e.g. 1:35)</option>
+                        <option {% if standings and standings.time_format == "minutes" %} selected {% endif %}>minutes (e.g. 95, 95:00)</option>
                     </select>
                 </div>
             </div>
@@ -123,7 +129,7 @@
             
             <div class="form-group">        
                 <div class="col-sm-offset-2 col-sm-10">
-                    <button type="button" class="btn btn-default" onclick="createStandings()">Create</button>
+                    <button type="button" class="btn btn-default" onclick="{{type}}Standings()">{{type[0].upper() + type[1:]}}</button>
                 </div>
             </div>
         </form>
