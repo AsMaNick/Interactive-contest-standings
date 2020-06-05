@@ -66,6 +66,12 @@ function getFormData() {
     has_error |= setError('#title_div', getError(title, 'Title'));
     has_error |= setError('#venue_div', getError(venue, 'Venue'));
     has_error |= setError('#link_div', getError(link, 'Link', 2, 256));
+    if (n_problems == '') {
+        setError('#n_problems_div', 'This field may not be blank');
+        has_error = true;
+    } else {
+        setError('#n_problems_div', '');
+    }
     if (has_error) {
         return {
             has_error: true,
