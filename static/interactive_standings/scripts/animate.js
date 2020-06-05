@@ -449,7 +449,8 @@ function go(only_init) {
     finish_contest = false;
     is_animation = true;
     var need_update = true;
-    if (document.getElementsByClassName('row_region')[0].getElementsByTagName('input')[0].disabled) {
+    if (document.getElementsByClassName('row_region').length > 0 &&
+        document.getElementsByClassName('row_region')[0].getElementsByTagName('input')[0].disabled) {
         need_update = false;
         if (!only_init) {
             updateButtonsAvailability(true);

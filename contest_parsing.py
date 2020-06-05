@@ -112,7 +112,7 @@ def parse_standings(link, n_problems, team_column, region_column, first_problem_
     if region_column != -1:
         show_regions = True
     regions_to_ignore = {}
-    standings = Standings(show_regions, regions_to_ignore)
+    standings = Standings(True, regions_to_ignore)
     problem_openers = ['' for i in range(n_problems)]
     time_openers = [1e9 for i in range(n_problems)]
     for row in table.xpath(rows_path):
@@ -121,7 +121,7 @@ def parse_standings(link, n_problems, team_column, region_column, first_problem_
         problem_datas = ['' for i in range(n_problems)]
         total, penalty = 0, 0
         team_name = ''
-        region = ''
+        region = 'Unknown'
         bad_row = False
         for column, item in enumerate(row, 1):
             if column == team_column:
