@@ -1,10 +1,65 @@
 import json
 import requests
 from time import time
+from math import log10
 
 
 def is_letter(c):
     return c.lower() != c.upper() or c == "'"
+
+
+def get_win_probability(ra, rb):
+    return 1.0 / (1.0 + 10.0 ** ((rb - ra) / 400.0))
+    
+
+def get_team_rating(team_ratings):
+    if len(team_ratings) == 0:
+        return 0
+    left = 1
+    right = 11111
+    for it in range(100):
+        r = (left + right) / 2.0;
+        r_wins_probability = 1.0;
+        for team_rating in team_ratings:
+            r_wins_probability *= get_win_probability(r, team_rating)
+        rating = log10(1 / (r_wins_probability) - 1) * 400 + r
+        if rating > r:
+            left = r
+        else:
+            right = r
+    return int((left + right) / 2.0)
+    
+
+def get_color_class(rating):
+    if rating == 0:
+        return "user-black"
+    elif rating < 1200:
+        return "user-gray"
+    elif rating < 1400:
+        return "user-green"
+    elif rating < 1600:
+        return "user-cyan"
+    elif rating < 1900:
+        return "user-blue"
+    elif rating < 2100:
+        return "user-violet"
+    elif rating < 2400:
+        return "user-orange"
+    elif rating < 3000:
+        return "user-red"
+    else:
+        return "user-legendary"
+        
+        
+def get_colored_rating(rating):
+    result = "<a class=\"" + get_color_class(rating) + "\">"
+    if get_color_class(rating) == "user-legendary":
+        result += "<span class=\"legendary-user-first-letter\">" + str(rating)[0] + "</span>"
+        result += str(rating)[1:]
+    else:
+        result += str(rating)
+    result += "</a>"
+    return result
 
 
 class CodeforcesUser:
@@ -18,24 +73,7 @@ class CodeforcesUser:
         self.organization = user_info['organization'] if 'organization' in user_info else ''
         
     def get_color_class(self):
-        if self.rating == 0:
-            return "user-black"
-        elif self.rating < 1200:
-            return "user-gray"
-        elif self.rating < 1400:
-            return "user-green"
-        elif self.rating < 1600:
-            return "user-cyan"
-        elif self.rating < 1900:
-            return "user-blue"
-        elif self.rating < 2100:
-            return "user-violet"
-        elif self.rating < 2400:
-            return "user-orange"
-        elif self.rating < 3000:
-            return "user-red"
-        else:
-            return "user-legendary"
+        return get_color_class(self.rating)
         
     def get_html_name(self, name, handle):
         result = "<a href=http://www.codeforces.com/profile/" + self.handle + " title=\"" + name + "\" class=\"" + self.get_color_class() + "\">";
@@ -184,6 +222,7 @@ class TeamIdentifier:
             position += 1
         res = ''
         team = self.get_team(team_members)
+        team_ratings = []
         for p in builder:
             if p[0]:
                 if team_members[p[1]].lower() in team:
@@ -192,6 +231,7 @@ class TeamIdentifier:
                     if cf_user is None:
                         res += team_members[p[1]]
                     else:
+                        team_ratings.append(cf_user.rating)
                         if show_handle:
                             res += cf_user.get_html_name(team_members[p[1]], handle)
                         else:
@@ -200,6 +240,15 @@ class TeamIdentifier:
                     res += team_members[p[1]]
             else:
                 res += p[1]
+        res = res.strip()
+        team_rating = get_team_rating(team_ratings)
+        if team_rating > 1:
+            addc = ''
+            if res[-1] in '])}':
+                addc = res[-1]
+                res = res[:-1]
+            res += ', total = ' + get_colored_rating(team_rating)
+            res += addc
         return res
         
         
