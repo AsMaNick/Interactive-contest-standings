@@ -34,13 +34,15 @@
             <th>Date</th>
             <th>External link</th>
         </tr>
-        <tr>
-            <td><a href="/standings/create"> <img src="/static/images/add.png" class="img-circle logo_small_photo"></a></td>
-            <td><a href="/standings/create">Create new contest standings</a></td>
-            <td>-</td>
-            <td>-</td>
-            <td>-</td>
-        </tr>
+        {% if user %}
+            <tr>
+                <td><a href="/standings/create"> <img src="/static/images/add.png" class="img-circle logo_small_photo"></a></td>
+                <td><a href="/standings/create">Create new contest standings</a></td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+        {% endif %}
         {% for standing in standings %}
             <tr>
                 <td><a href="/standings/{{standing.id}}?time_delay=3000"> <img src="{{standing.logo}}" class="img-circle logo_small_photo"></a></td>

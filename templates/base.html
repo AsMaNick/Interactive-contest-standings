@@ -29,10 +29,18 @@
                         </ul>
                     </li>
                     {% block header_username %}
-                    <li><a href="/users/{{user.id}}"><span class="glyphicon glyphicon-user"></span> {{user.username}}</a></li>
+                        {% if user %}
+                            <li><a href="/users/{{user.id}}"><span class="glyphicon glyphicon-user"></span> {{user.username}}</a></li>
+                        {% else %}
+                            <li><a href="/signup"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                        {% endif %}
                     {% endblock %}
                     {% block header_logout %}
-                    <li><a class="clickable" href="/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+                        {% if user %}
+                            <li><a class="clickable" href="/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+                        {% else %}
+                            <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                        {% endif %}
                     {% endblock %}
                 </ul>
             </div>

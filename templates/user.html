@@ -13,10 +13,10 @@
 
 {% block content %}
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-        <h1 class="page-header">{{user.get_full_name()}}</h1>
+        <h1 class="page-header">{{view_user.get_full_name()}}</h1>
         <div class="row placeholders">
             <div class="col-xs-6 col-sm-3 placeholder panel panel-default big_photo_placeholder">
-                <img src="{{user.photo}}" class="pet_big_photo"> </img>
+                <img src="{{view_user.photo}}" class="pet_big_photo"> </img>
             </div>
             <div class="col-sm-9" contenteditable="false">
                 <div class="panel panel-default">
@@ -26,20 +26,20 @@
                     <table class = "table">
                         <tr>
                             <td class="col-sm-2 text-left"> Username: </td>
-                            <td class="col-sm-8 text-left"> {{user.username}} </td>
+                            <td class="col-sm-8 text-left"> {{view_user.username}} </td>
                         </tr>
                         <tr>
                             <td class="col-sm-2 text-left"> Full name: </td>
-                            <td class="col-sm-8 text-left"> {{user.get_full_name()}} </td>
+                            <td class="col-sm-8 text-left"> {{view_user.get_full_name()}} </td>
                         </tr>
                         <tr>
                             <td class="col-sm-2 text-left"> Registration date: </td>
-                            <td class="col-sm-8 text-left"> {{user.get_registration_date()}} </td>
+                            <td class="col-sm-8 text-left"> {{view_user.get_registration_date()}} </td>
                         </tr>
                         <tr>
                             <td class="col-sm-2 text-left"> Created standings: </td>
                             <td class="col-sm-8 text-left">
-                                <a href="/users/{{user.id}}/standings">{{user.get_created_standings_count()}}</a>
+                                <a href="/users/{{view_user.id}}/standings">{{view_user.get_created_standings_count()}}</a>
                             </td>
                         </tr>
                     </table>

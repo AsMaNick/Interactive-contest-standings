@@ -14,6 +14,12 @@ assets = Environment()
 assets.init_app(app)
 
 
+def get_logged_in_user():
+    if 'flask_user_id' not in session:
+        return None
+    return User.get_or_none(session['flask_user_id'])
+    
+        
 def check_login(route):
     def wrapper(*args, **kwargs):
         if 'flask_user_id' not in session:
@@ -48,9 +54,8 @@ def signup():
 
 
 @app.route('/standings/all')
-@check_login
-def all_standings(user):
-    return render_template('standings.html', type='all', user=user,
+def all_standings():
+    return render_template('standings.html', type='all', user=get_logged_in_user(),
                            standings=Standings.select().order_by(-Standings.id))
     
     
@@ -62,9 +67,8 @@ def my_standings(user):
 
 
 @app.route('/users/<int:user_id>/standings')
-@check_login
-def user_standings(user, user_id):
-    return render_template('standings.html', type='all', user=user,
+def user_standings(user_id):
+    return render_template('standings.html', type='all', user=get_logged_in_user(),
                            standings=Standings.select().where(Standings.creator == user_id).order_by(-Standings.id))
                            
                            
@@ -103,21 +107,18 @@ def create_standings(user):
     
     
 @app.route('/users')
-@check_login
-def users(user):
-    return render_template('users.html', user=user, users=User.select())
+def users():
+    return render_template('users.html', user=get_logged_in_user(), users=User.select())
 
 
 @app.route('/users/<int:user_id>')
-@check_login
-def view_user(user, user_id):
-    return render_template('user.html', user=user)
+def view_user(user_id):
+    return render_template('user.html', user=get_logged_in_user(), view_user=User.get_or_none(User.id == user_id))
     
     
 @app.route('/home')
-@check_login
-def home(user):
-    return render_template('home.html', user=user)
+def home():
+    return render_template('home.html', user=get_logged_in_user())
 
 
 @app.route('/api/signup', methods=['POST'])
