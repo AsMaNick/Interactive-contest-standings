@@ -46,7 +46,12 @@
         {% for standing in standings %}
             <tr>
                 <td><a href="/standings/{{standing.id}}?time_delay=3000"> <img src="{{standing.logo}}" class="img-circle logo_small_photo"></a></td>
-                <td>{{standing.season}}</td>
+                <td>
+                    {{standing.season}}
+                    {% if user and standing.creator.id == user.id %}
+                        , <a href="/standings/{{standing.id}}/edit">edit</a> 
+                    {% endif %}
+                </td>
                 <td>{{standing.title}}</td>
                 <td>{{standing.get_named_date()}}</td>
                 <td><a href="{{standing.link}}">{{standing.get_short_link()}}</a></td>
