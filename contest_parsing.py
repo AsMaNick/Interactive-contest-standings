@@ -38,7 +38,7 @@ def parse_cell(content, time_format):
             upd += ' '
         else:
             upd += c
-    content = upd
+    content = upd.strip()
     has_minus, has_plus, has_digit, has_other = False, False, False, False
     for c in content:
         if c.isspace():
@@ -54,6 +54,20 @@ def parse_cell(content, time_format):
     if has_other:
         return 'fail', False, -1, -1
     wrong_attempts = -1
+    if has_plus:
+        pos = content.find('+')
+        started = -1
+        bad = False
+        for i in range(pos + 1, len(content)):
+            if content[i] == ' ':
+                if started != -1:
+                    bad = True
+                    break
+                continue
+            if started == -1:
+                started = i
+        if bad:
+            content = '+' + content[started:]
     if has_plus and content.find('+ ') != -1:
         wrong_attempts = 0
     else:
@@ -92,11 +106,16 @@ def get_result(solved, wrong_attempts, time):
     
     
 def parse_standings(link, n_problems, team_column, region_column, first_problem_column, time_format):
-    content = requests.get(link).text
+    response = requests.get(link)
+    if response.encoding == 'ISO-8859-1':
+        response.encoding = 'cp1251'
+    content = response.text
     parsed_body = html.fromstring(content)
     tables = parsed_body.xpath('//table[@class="standings"]')
     if len(tables) == 0:
         tables = parsed_body.xpath('//table[@id="standings"]')
+    if len(tables) == 0:
+        tables = parsed_body.xpath('//table[@id="standingstable"]')
     if len(tables) == 0:
         return "fail, cann't find table standings", None
     table = tables[0]
@@ -123,7 +142,12 @@ def parse_standings(link, n_problems, team_column, region_column, first_problem_
         team_name = ''
         region = 'Unknown'
         bad_row = False
-        for column, item in enumerate(row, 1):
+        comment_columns = 0
+        for iter_column, item in enumerate(row, 1):
+            if isinstance(item, html.HtmlComment):
+                comment_columns += 1
+                continue
+            column = iter_column - comment_columns
             if column == team_column:
                 team_name = get_text_content(item)
             elif column == region_column:
