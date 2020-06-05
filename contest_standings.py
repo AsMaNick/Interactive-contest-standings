@@ -1,3 +1,6 @@
+from participants_identification import team_identifier
+
+
 statistic_team_number = 5
 
 
@@ -35,13 +38,14 @@ class Result:
                 res += 1
         return res
         
-    def write(self, place, open_times, problem_openers, team_members, f):
+    def write(self, place, open_times, problem_openers, team_members, identification, f):
         print('<tr class="participant_result">', file=f)
         print('<td class="st_place"><input style="width: 100%; outline: none; border:none" readonly type="text" value={}></input></td>'.format(place), file=f)
         team_title = self.name
         if self.name in team_members:
             team_title = team_members[self.name]
-        print('<td class="st_team" title="{}">{}</td>'.format(team_title, self.name), file=f)
+        updated_name = team_identifier.identify(self.name, identification)
+        print('<td class="st_team" title="{}">{}</td>'.format(team_title, updated_name), file=f)
         print('<td class="st_extra">{}</td>'.format(self.region), file=f)
         for prob_res, prob_time, open_time, problem_opener in zip(self.problem_results, self.problem_times, open_times, problem_openers):
             background = ''
@@ -72,12 +76,12 @@ class Standings:
         self.all_results = []
         self.problem_openers = None
         
-    def set_meta_information(self, title, contest_duration, problems, path_to_scripts):
+    def set_meta_information(self, title, contest_duration, problems, path_to_scripts, identification):
         self.title = title
         self.contest_duration = contest_duration
         self.problems = problems
         self.path_to_scripts = path_to_scripts
-        print(self.path_to_scripts)
+        self.identification = identification
         
         self.problem_ids = [chr(ord('A') + problem_id) for problem_id in range(problems)]
         self.problem_names = ['' for problem_id in range(problems)]
@@ -211,6 +215,7 @@ class Standings:
         print('<link rel="stylesheet" href="{}styles/unpriv3.css" type="text/css" />'.format(self.path_to_scripts), file=f)
         print('<link rel="stylesheet" href="{}styles/animate.css" type="text/css" />'.format(self.path_to_scripts), file=f)
         print('<link rel="stylesheet" href="{}styles/styles.css" type="text/css" />'.format(self.path_to_scripts), file=f)
+        print('<link rel="stylesheet" href="{}styles/cf_styles.css" type="text/css" />'.format(self.path_to_scripts), file=f)
         print('<style id="styles"> table.standings td { height: 40px; } </style>', file=f)
             
         print('<body onload=loadResults()>', file=f)
@@ -280,9 +285,9 @@ class Standings:
         place = 0
         for place, result in zip(places, self.all_results):
             if result.region in self.ignore_regions:            
-                result.write('-', open_times, self.problem_openers, self.team_members, f)
+                result.write('-', open_times, self.problem_openers, self.team_members, self.identification, f)
             else:
-                result.write(place, open_times, self.problem_openers, self.team_members, f)
+                result.write(place, open_times, self.problem_openers, self.team_members, self.identification, f)
             if True:
                 num = 0
                 for prob_res, prob_time in zip(result.problem_results, result.problem_times):

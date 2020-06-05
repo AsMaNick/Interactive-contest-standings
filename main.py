@@ -94,7 +94,7 @@ def view_standings(standings_id):
     <p align="center" style="font-family: times-new-roman"> <font size="7"> {}, {} </font> </p>'''.format(standings.title, 
                                                                                                           standings.venue,
                                                                                                           standings.get_named_date())
-    created_standings.set_meta_information(title, standings.duration, standings.n_problems, path_to_scripts)
+    created_standings.set_meta_information(title, standings.duration, standings.n_problems, path_to_scripts, standings.identification)
     html = StringIO()
     created_standings.write(html)
     return html.getvalue()
