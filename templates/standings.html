@@ -43,7 +43,7 @@
         </tr>
         {% for standing in standings %}
             <tr>
-                <td><a href="/standings/{{standing.id}}"> <img src="{{standing.logo}}" class="img-circle logo_small_photo"></a></td>
+                <td><a href="/standings/{{standing.id}}?time_delay=3000"> <img src="{{standing.logo}}" class="img-circle logo_small_photo"></a></td>
                 <td>{{standing.season}}</td>
                 <td>{{standing.title}}</td>
                 <td>{{standing.get_date()}}</td>

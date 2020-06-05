@@ -51,7 +51,7 @@ def signup():
 @check_login
 def all_standings(user):
     return render_template('standings.html', type='all', user=user,
-                           standings=Standings.select())
+                           standings=Standings.select().order_by(-Standings.id))
     
     
 @app.route('/standings/my')
