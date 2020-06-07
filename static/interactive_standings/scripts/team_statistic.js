@@ -34,6 +34,10 @@ function getPlaceOverTime(submissions_data, team_id, times) {
 }
 
 function team_dblclick(event) {
+    if (!loaded) {
+        console.log('Page is not loaded yet');
+        return;
+    }
     var elem = event.target;
     var team_id = getTeamId(elem);
     var div_team_statistic = $('<div id="team_statistic" class="team_statistic" style="top: ' + (50 + event.pageY - event.clientY).toString() + '"><canvas id="place_over_time_chart"></canvas></div>');
@@ -184,3 +188,14 @@ function getSubmissionsData() {
         n_teams: id + 1
     }
 }
+
+window.addEventListener('click', function(e) { 
+    var elem = document.getElementById('team_statistic');
+    if (!elem) {
+        return;
+    }
+    if (!elem.contains(e.target)){
+        elem.remove();
+        $('#container').removeClass('disabled_content');
+    }
+});
