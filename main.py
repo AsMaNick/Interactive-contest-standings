@@ -1,6 +1,6 @@
 import os
 import chess
-from flask import Flask, render_template, request, jsonify, send_from_directory, redirect, session
+from flask import Flask, render_template, render_template_string, request, jsonify, send_from_directory, redirect, session
 from flask_assets import Environment, Bundle
 from database import *
 import requests
@@ -85,7 +85,7 @@ def view_standings(standings_id):
                                                 standings.time_format)
     if status != 'ok':
         return status
-    path_to_scripts = '/static/interactive_standings/'
+    path_to_scripts = 'interactive_standings/'
     title = '''<p align="center" style="font-family: times-new-roman">
     <a style="float: left; margin: 13px; padding-left: 7px" href="../../"> 
         <img width="30px" src="/static/images/back_arrow.png">
@@ -97,7 +97,7 @@ def view_standings(standings_id):
     created_standings.set_meta_information(title, standings.duration, standings.n_problems, path_to_scripts, standings.identification)
     html = StringIO()
     created_standings.write(html)
-    return html.getvalue()
+    return render_template_string(html.getvalue())
     
     
 @app.route('/standings/create')

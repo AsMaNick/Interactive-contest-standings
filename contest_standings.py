@@ -211,18 +211,17 @@ class Standings:
         
     def write(self, f):
         print('<title>Contest standings</title>', file=f)
-        print('<link rel="stylesheet" href="{}styles/unpriv.css" type="text/css" />'.format(self.path_to_scripts), file=f)
-        print('<link rel="stylesheet" href="{}styles/unpriv3.css" type="text/css" />'.format(self.path_to_scripts), file=f)
-        print('<link rel="stylesheet" href="{}styles/animate.css" type="text/css" />'.format(self.path_to_scripts), file=f)
-        print('<link rel="stylesheet" href="{}styles/styles.css" type="text/css" />'.format(self.path_to_scripts), file=f)
-        print('<link rel="stylesheet" href="{}styles/cf_styles.css" type="text/css" />'.format(self.path_to_scripts), file=f)
+        print('{{% assets output="gen/interactive_standings.css", "{}styles/unpriv.css", "{}styles/unpriv3.css", "{}styles/animate.css", "{}styles/styles.css", "{}styles/cf_styles.css" %}}'.format(self.path_to_scripts, self.path_to_scripts, self.path_to_scripts, self.path_to_scripts, self.path_to_scripts), file=f)
+        print('<link rel="stylesheet" href="{{ ASSET_URL }}">', file=f)
+        print('{% endassets %}', file=f)
+        
         print('<style id="styles"> table.standings td { height: 40px; } </style>', file=f)
             
         print('<body onload=loadResults()>', file=f)
-        print('<script type="text/javascript" src="{}scripts/jquery.js"> </script>'.format(self.path_to_scripts), file=f)
-        print('<script type="text/javascript" src="{}scripts/filter_regions.js"> </script>'.format(self.path_to_scripts), file=f)
-        print('<script type="text/javascript" src="{}scripts/animate.js"> </script>'.format(self.path_to_scripts), file=f)
-        print('<script type="text/javascript" src="{}scripts/parse_submissions.js"> </script>'.format(self.path_to_scripts), file=f)
+        print('{{% assets output="gen/interactive_standings.js", "{}scripts/jquery.js", "{}scripts/filter_regions.js", "{}scripts/animate.js", "{}scripts/parse_submissions.js" %}}'.format(self.path_to_scripts, self.path_to_scripts, self.path_to_scripts, self.path_to_scripts), file=f)
+        print('<script type="text/javascript" src="{{ ASSET_URL }}"></script>', file=f)
+        print('{% endassets %}', file=f)
+        
         print('<div id="main-cont">', file=f)
         print('<div id="container">', file=f)
         print(self.title, file=f)
