@@ -210,6 +210,10 @@ class Standings:
         print('</table>', file=f)
         
     def write(self, f):
+        print('<div id="standingsSettings"><!--', file=f)
+        print('contestDuration {}'.format(self.contest_duration), file=f)
+        print('--></div>', file=f)
+        
         print('<title>Contest standings</title>', file=f)
         print('{{% assets output="gen/interactive_standings.css", "{}styles/unpriv.css", "{}styles/unpriv3.css", "{}styles/animate.css", "{}styles/styles.css", "{}styles/cf_styles.css" %}}'.format(self.path_to_scripts, self.path_to_scripts, self.path_to_scripts, self.path_to_scripts, self.path_to_scripts), file=f)
         print('<link rel="stylesheet" href="{{ ASSET_URL }}">', file=f)
