@@ -61,10 +61,15 @@ function buildChart(team_id) {
         data: {
             labels: labels,
             datasets: [{
+                fill: 'bottom',
                 label: 'Place over time',
                 pointRadius: 2,
                 data: places,
-                borderWidth: 1
+                borderWidth: 1,
+                backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                borderColor: 'rgba(0, 0, 255, 0.4)',
+                pointBorderColor: 'rgba(0, 0, 255, 0.2)',
+                pointBackgroundColor: 'rgba(0, 0, 255, 0.2)'
             }]
         },
         options: {
@@ -72,6 +77,7 @@ function buildChart(team_id) {
             scales: {
                 yAxes: [{
                     ticks: {
+                        reverse: true,
                         beginAtZero: true,
                         callback: function(value, index, values) {
                             if (Math.abs(value - parseInt(value) > 0.0001)) {
@@ -86,7 +92,7 @@ function buildChart(team_id) {
                         callback: function(value, index, values) {
                             return value;
                         },
-                        maxTicksLimit: 20
+                        maxTicksLimit: parseInt(duration / 15)
                     }
                 }]
             }
