@@ -75,10 +75,10 @@ class CodeforcesUser:
     def get_color_class(self):
         return get_color_class(self.rating)
         
-    def get_html_name(self, name, handle):
+    def get_html_name(self, name, handle, max_length = 17):
         result = "<a href=https://codeforces.com/profile/" + self.handle + " title=\"" + name + "\" class=\"" + self.get_color_class() + "\">";
-        if len(handle) > 17:
-            handle = handle[:16] + "..." + handle[-1];
+        if len(handle) > max_length:
+            handle = handle[:max_length - 1] + "..." + handle[-1];
         if self.get_color_class() == "user-legendary":
             result += "<span class=\"legendary-user-first-letter\">" + handle[0] + "</span>";
             result += handle[1:]
