@@ -25,7 +25,7 @@
             {% autoescape off %}
             {% for team in team_identifier.teams_with_rating %}
                 <tr>
-                    <td>{{loop.index}}</td>
+                    <td><a href="{{team[3]}}" style="color: black">{{loop.index}}</a></td>
                     {% for i in range(3) %}
                         {% if i >= team[2]|length %}
                             <td>-</td>

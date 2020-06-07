@@ -158,7 +158,8 @@ class TeamIdentifier:
             team_ratings = [self.cf.get_user(member[1]).rating if self.cf.get_user(member[1]) else 0 for member in team]
             team_rating = get_team_rating(team_ratings)
             html_team_rating = get_colored_rating(team_rating)
-            self.teams_with_rating.append((team_rating, html_team_rating, team))
+            team_link = 'https://weaselcrow.com/pro/cf/team/?h=' + ';'.join(member[1] for member in team[:3])
+            self.teams_with_rating.append((team_rating, html_team_rating, team, team_link))
         self.teams_with_rating.sort(key=lambda team: -team[0])
         self.last_update = time()
         
