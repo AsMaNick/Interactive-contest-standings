@@ -1,11 +1,45 @@
+function getCountEnding(s) {
+    var x = parseInt(s);
+    if (x % 10 == 1 && parseInt(x / 10) != 1) {
+        return s + 'st';
+    } else if (x % 10 == 2 && parseInt(x / 10) != 1) {
+        return s + 'nd';
+    } else if (x % 10 == 3 && parseInt(x / 10) != 1) {
+        return s + 'rd';
+    } else {
+        return s + 'th';
+    }
+}
+
+function getNumberTries(s) {
+    if (s == '+') {
+        return 1;
+    }
+    return parseInt(s.substr(1)) + 1;
+}
+
 function getPlaceOverTime(submissions_data, team_id, times) {
-    var all_results = []
+    var all_results = [];
     for (var i = 0; i < submissions_data.n_teams; ++i) {
         all_results.push(new Result(-1));
     }
+    var cnt_oks = [];
+    var total_oks = [];
+    for (var i = 0; i < submissions_data.n_problems; ++i) {
+        cnt_oks.push(0);
+        total_oks.push(0);
+    }
+    for (submission of submissions_data.all_submissions) {
+        if (submission.result[0] == '+') {
+            ++total_oks[submission.problem_id];
+        }
+    }
+    var log_info = '';
     var places = [];
     var cur = 0;
+    var last_place = submissions_data.n_teams;
     for (var cur_time of times) {
+        var ids_to_log = [];
         while (cur < submissions_data.all_submissions.length && submissions_data.all_submissions[cur].time <= '(' + cur_time + ')') {
             var id = submissions_data.all_submissions[cur].id;
             var time = submissions_data.all_submissions[cur].time;
@@ -19,6 +53,10 @@ function getPlaceOverTime(submissions_data, team_id, times) {
                     all_results[id].penalty += contest_penalty * parseInt(submission_result.substr(1));
                     all_results[id].dirt_submissions += parseInt(submission_result.substr(1));
                 }
+                ++cnt_oks[problem_id];
+            }
+            if (id == team_id) {
+                ids_to_log.push(cur);
             }
             ++cur;
         }
@@ -29,7 +67,27 @@ function getPlaceOverTime(submissions_data, team_id, times) {
             }
         }
         places.push(place);
+        for (var id_log of ids_to_log) {
+            var time = submissions_data.all_submissions[id_log].time;
+            var submission_result = submissions_data.all_submissions[id_log].result;
+            var problem_id = submissions_data.all_submissions[id_log].problem_id;
+            var problem_name = String.fromCharCode('A'.charCodeAt(0) + problem_id);
+            if (submission_result[0] == '+') {
+                log_info += 'From the ' + getCountEnding(getNumberTries(submission_result)) + ' try solve problem ' + problem_name + ' at ' + time + '.';
+                log_info += ' Become ' + getCountEnding(cnt_oks[problem_id].toString()) + ' team from ' + total_oks[problem_id].toString() + ' which solved problem ' + problem_name + '.';
+            } else {
+                log_info += 'Unsuccessful problem attempt on problem ' + problem_name + ' at ' + time + '.';
+            }
+            if (place < last_place) {
+                log_info += ' Moved to the ' + getCountEnding(place) + ' place.';
+            } else if (place > last_place) {
+                log_info += ' Dropped to the ' + getCountEnding(place) + ' place.';
+            }
+            last_place = place;
+            log_info += '<br>';
+        }
     }
+    $('#team_log_statistic').html(log_info);
     return places;
 }
 
@@ -40,7 +98,7 @@ function team_dblclick(event) {
     }
     var elem = event.target;
     var team_id = getTeamId(elem);
-    var div_team_statistic = $('<div id="team_statistic" class="team_statistic" style="top: ' + (50 + event.pageY - event.clientY).toString() + '"><canvas id="place_over_time_chart"></canvas></div>');
+    var div_team_statistic = $('<div id="team_statistic" class="team_statistic" style="top: ' + (50 + event.pageY - event.clientY).toString() + '"><canvas id="place_over_time_chart"></canvas><div id="team_log_statistic"></div></div>');
     $('#main-cont').append(div_team_statistic);
     $('#container').addClass('disabled_content');
     buildChart(team_id);
@@ -117,6 +175,7 @@ function getTeamId(elem) {
 function getSubmissionsData() {
     var all_submissions = [];
     var id = -1;
+    var n_problems = 0;
     if (document.getElementById('submissionsLog') === null) {
         for (var i = 0; i < all_teams_elem.length; ++i) {
             if (all_teams_elem[i].hidden) {
@@ -126,6 +185,7 @@ function getSubmissionsData() {
             var probs = all_teams_elem[i].getElementsByClassName('st_prob');
             var all_ac_times = [];
             var all_was = [];
+            n_problems = probs.length;
             for (var j = 0; j < probs.length; ++j) {
                 var last_time = contest_duration - 1;
                 var prob_res = getSubmissionResult(probs[j]);
@@ -191,7 +251,8 @@ function getSubmissionsData() {
     }
     return {
         all_submissions: all_submissions,
-        n_teams: id + 1
+        n_teams: id + 1,
+        n_problems: n_problems
     }
 }
 
@@ -205,3 +266,14 @@ window.addEventListener('click', function(e) {
         $('#container').removeClass('disabled_content');
     }
 });
+
+document.onkeyup = function(e) {
+    e = e || window.event;
+    if (e.keyCode == '27') { // closing statistic window with esc key
+        var elem = document.getElementById('team_statistic');
+        if (elem) {
+            elem.remove();
+            $('#container').removeClass('disabled_content');
+        }
+    }
+}
