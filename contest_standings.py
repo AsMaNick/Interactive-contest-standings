@@ -45,7 +45,7 @@ class Result:
         if self.name in team_members:
             team_title = team_members[self.name]
         updated_name = team_identifier.identify(self.name, identification)
-        print('<td class="st_team" title="{}">{}</td>'.format(team_title, updated_name), file=f)
+        print('<td class="st_team" title="{}" ondblclick="team_dblclick(event)">{}</td>'.format(team_title, updated_name), file=f)
         print('<td class="st_extra">{}</td>'.format(self.region), file=f)
         for prob_res, prob_time, open_time, problem_opener in zip(self.problem_results, self.problem_times, open_times, problem_openers):
             background = ''
@@ -218,7 +218,7 @@ class Standings:
         print('<style id="styles"> table.standings td { height: 40px; } </style>', file=f)
             
         print('<body onload=loadResults()>', file=f)
-        print('{{% assets output="gen/interactive_standings.js", "{}scripts/jquery.js", "{}scripts/filter_regions.js", "{}scripts/animate.js", "{}scripts/parse_submissions.js" %}}'.format(self.path_to_scripts, self.path_to_scripts, self.path_to_scripts, self.path_to_scripts), file=f)
+        print('{{% assets output="gen/interactive_standings.js", "third-party/js/Chart.bundle.min.js", "{}scripts/jquery.js", "{}scripts/filter_regions.js", "{}scripts/animate.js", "{}scripts/parse_submissions.js", "{}scripts/team_statistic.js"  %}}'.format(self.path_to_scripts, self.path_to_scripts, self.path_to_scripts, self.path_to_scripts, self.path_to_scripts), file=f)
         print('<script type="text/javascript" src="{{ ASSET_URL }}"></script>', file=f)
         print('{% endassets %}', file=f)
         

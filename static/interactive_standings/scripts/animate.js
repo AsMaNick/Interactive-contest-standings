@@ -433,6 +433,22 @@ function getStartTime() {
     return res;
 }
 
+function getContestDuration() {
+    if (document.getElementById('standingsSettings') === null) {
+        return 300;
+    } else {
+        var settings = document.getElementById('standingsSettings').innerHTML;
+        settings = settings.substr(5, settings.length - 8);
+        var params = settings.split('\n');
+        for (var i = 0; i < params.length; ++i) {
+            var data = params[i].split(' ');
+            if (data[0] == 'contestDuration') {
+                return parseInt(data[1]);
+            }
+        }
+    }
+}
+
 function go(only_init) {
     if (!loaded || (is_animation && only_init === undefined)) {
         return;
@@ -467,19 +483,7 @@ function go(only_init) {
         fillY();
         all_submissions = [];
         var id = -1;
-        if (document.getElementById('standingsSettings') === null) {
-            contest_duration = 300;
-        } else {
-            var settings = document.getElementById('standingsSettings').innerHTML;
-            settings = settings.substr(5, settings.length - 8);
-            params = settings.split('\n');
-            for (var i = 0; i < params.length; ++i) {
-                var data = params[i].split(' ');
-                if (data[0] == 'contestDuration') {
-                    contest_duration = parseInt(data[1]);
-                }
-            }
-        }
+        contest_duration = getContestDuration();
         if (document.getElementById('submissionsLog') === null) {
             for (var i = 0; i < all_teams_elem.length; ++i) {
                 if (all_teams_elem[i].hidden) {

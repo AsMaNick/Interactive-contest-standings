@@ -36,3 +36,23 @@
   background: #4CAF50; /* Green background */
   cursor: pointer; /* Cursor on hover */
 }
+
+.team_statistic {
+    border-radius: 3px;
+    position:absolute;
+    right: 0;
+    left: 0;
+    z-index: 10000;
+    background:white;
+    width: 800px;
+    height: 500px;
+    margin: auto
+}
+
+.disabled_content {
+    opacity: 0.8;
+    pointer-events: none;
+}
+
+#place_over_time_chart {
+}
