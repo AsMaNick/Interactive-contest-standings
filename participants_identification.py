@@ -76,7 +76,7 @@ class CodeforcesUser:
         return get_color_class(self.rating)
         
     def get_html_name(self, name, handle):
-        result = "<a href=http://www.codeforces.com/profile/" + self.handle + " title=\"" + name + "\" class=\"" + self.get_color_class() + "\">";
+        result = "<a href=https://codeforces.com/profile/" + self.handle + " title=\"" + name + "\" class=\"" + self.get_color_class() + "\">";
         if len(handle) > 17:
             handle = handle[:16] + "..." + handle[-1];
         if self.get_color_class() == "user-legendary":
@@ -133,6 +133,7 @@ class TeamIdentifier:
         response = requests.get(self.link_to_teams)
         j = response.json()
         self.teams = []
+        self.teams_with_rating = []
         self.team_ids = {}
         Q = 0
         for entry in j['feed']['entry']:
@@ -154,6 +155,11 @@ class TeamIdentifier:
                             for p5 in range(p4 + 1, len(team)):
                                 self.team_ids[TeamIdentifier.get_team_subset(team_names, p1, p2, p3, p4, p5)] = len(self.teams)
             self.teams.append(team)
+            team_ratings = [self.cf.get_user(member[1]).rating if self.cf.get_user(member[1]) else 0 for member in team]
+            team_rating = get_team_rating(team_ratings)
+            html_team_rating = get_colored_rating(team_rating)
+            self.teams_with_rating.append((team_rating, html_team_rating, team))
+        self.teams_with_rating.sort(key=lambda team: -team[0])
         self.last_update = time()
         
     def get_team_subset(team, *members):

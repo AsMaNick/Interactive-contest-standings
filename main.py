@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, jsonify, send_from_directory,
 from flask_assets import Environment, Bundle
 from database import *
 import requests
-from contest_parsing import parse_standings
+from contest_parsing import parse_standings, team_identifier
 from io import StringIO
 
         
@@ -120,6 +120,11 @@ def users():
     return render_template('users.html', user=get_logged_in_user(), users=User.select())
 
 
+@app.route('/teams')
+def teams():
+    return render_template('teams.html', user=get_logged_in_user(), team_identifier=team_identifier)
+    
+    
 @app.route('/users/<int:user_id>')
 def view_user(user_id):
     return render_template('user.html', user=get_logged_in_user(), view_user=User.get_or_none(User.id == user_id))

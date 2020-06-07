@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block header %}
+    {{ super() }}
+{% endblock %}
+
+{% block menu %}
+    {{ super() }}
+    {% block menu_teams %}
+        <li class="active"><a href="/users">Teams</a></li>
+    {% endblock %}
+{% endblock %}
+
+{% block content %}
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <h1 class="page-header">Teams</h1>
+        <table class="table-hover" style='margin-left: 40px; width: 100%'>
+            <tr>
+                <th>Team</th>
+                <th>Team member 1</th>
+                <th>Team member 2</th>
+                <th>Team member 3</th>
+                <th>Rating</th>
+            </tr>
+            {% autoescape off %}
+            {% for team in team_identifier.teams_with_rating %}
+                <tr>
+                    <td>{{loop.index}}</td>
+                    {% for i in range(3) %}
+                        {% if i >= team[2]|length %}
+                            <td>-</td>
+                        {% elif team_identifier.cf.get_user(team[2][i][1]) %}
+                            <td>{{team_identifier.cf.get_user(team[2][i][1]).get_html_name(team[2][i][0][0].upper() + team[2][i][0][1:], team[2][i][1])}}</td>
+                        {% else %}
+                            <td><a href="https://codeforces.com/profile/{{team[2][i][1]}}" class="user-black">{{team[2][i][1]}}</a></td>
+                        {% endif %}
+                    {% endfor %}
+                    <td>{{team[1]}}</td>
+                </tr>
+            {% endfor %}
+            {% endautoescape %}
+        </table>
+        <hr>
+    </div>
+{% endblock %}
