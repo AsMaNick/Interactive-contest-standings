@@ -146,6 +146,7 @@ function buildChart(team_id) {
                     }
                 }],
                 xAxes: [{
+                    position: 'top',
                     ticks: {
                         callback: function(value, index, values) {
                             return value;
